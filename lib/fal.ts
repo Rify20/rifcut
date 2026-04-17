@@ -12,9 +12,9 @@ export function buildFalInput(imageUrl: string, mode: RifMode) {
       image_url: imageUrl,
       sync_mode: true,
       output_format: "png",
-      operating_resolution: "2048x2048",
+      operating_resolution: "2048x2048" as const,
       refine_foreground: true,
-      task_type: "portrait"
+      task_type: "portrait" as const
     };
   }
 
@@ -23,9 +23,9 @@ export function buildFalInput(imageUrl: string, mode: RifMode) {
       image_url: imageUrl,
       sync_mode: true,
       output_format: "png",
-      operating_resolution: "2304x2304",
+      operating_resolution: "2304x2304" as const,
       refine_foreground: true,
-      task_type: "general"
+      task_type: "general" as const
     };
   }
 
@@ -33,8 +33,8 @@ export function buildFalInput(imageUrl: string, mode: RifMode) {
     image_url: imageUrl,
     sync_mode: true,
     output_format: "png",
-    operating_resolution: "1024x1024",
+    operating_resolution: "1024x1024" as const,
     refine_foreground: true,
-    task_type: "general"
+    task_type: "general" as const
   };
 }
