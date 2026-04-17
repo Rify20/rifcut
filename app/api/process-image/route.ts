@@ -10,31 +10,51 @@ export async function POST(req: Request) {
     };
 
     if (!body.imageUrl) {
-      return NextResponse.json({ error: "Missing imageUrl" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing imageUrl" },
+        { status: 400 }
+      );
     }
 
     const result = await fal.subscribe("fal-ai/birefnet/v2", {
-      input: buildFalInput(body.imageUrl, body.mode ?? "standard"),
+      input: buildFalInput(
+        body.imageUrl,
+        body.mode ?? "studio"
+      ),
       logs: true
     });
 
-    const output = result.data as {
-      image?: {
-        url?: string;
-      };
-    };
+    const data: any = result.data;
 
-    const resultUrl = output?.image?.url;
+    const resultUrl =
+      data?.image?.url ||
+      data?.images?.[0]?.url ||
+      data?.output?.url ||
+      data?.url ||
+      null;
 
     if (!resultUrl) {
-      return NextResponse.json({ error: "No result image" }, { status: 500 });
+      console.log("FAL RESPONSE:", data);
+
+      return NextResponse.json(
+        { error: "No result image returned" },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ resultUrl });
-  } catch (error) {
-    console.error(error);
+    return NextResponse.json({
+      resultUrl
+    });
+
+  } catch (error: any) {
+    console.error("PROCESS ERROR:", error);
+
     return NextResponse.json(
-      { error: "Failed to process image" },
+      {
+        error:
+          error?.message ||
+          "Failed to process image"
+      },
       { status: 500 }
     );
   }
